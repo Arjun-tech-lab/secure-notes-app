@@ -2,35 +2,23 @@ import Fastify from "fastify";
 import { encrypt, decrypt } from "./utils/encryption.js";
 import cors from "@fastify/cors";
 
-
-
 const app = Fastify();
-
 
 await app.register(cors, {
   origin: "*",
 });
 
-
 const notes = [];
-
 
 app.get("/", async () => {
   return { message: "API is running" };
 });
 
-app.listen({ port: 4000 }, (err) => {
-  if (err) {
-    console.error(err);
-    process.exit(1);
-  }
-  console.log("Server running on http://localhost:4000");
-});
 app.post("/encrypt", async (request, reply) => {
   const { text } = request.body;
-  const result = encrypt(text);
-  return result;
+  return encrypt(text);
 });
+
 app.post("/notes", async (request, reply) => {
   const { text } = request.body;
 
@@ -45,12 +33,20 @@ app.post("/notes", async (request, reply) => {
 
   return { message: "Note saved", note };
 });
+
 app.get("/notes", async () => {
-  const decryptedNotes = notes.map((note) => ({
+  return notes.map((note) => ({
     id: note.id,
     text: decrypt(note),
   }));
-
-  return decryptedNotes;
 });
 
+const PORT = process.env.PORT || 4000;
+
+app.listen({ port: PORT }, (err) => {
+  if (err) {
+    console.error(err);
+    process.exit(1);
+  }
+  console.log(`Server running on port ${PORT}`);
+});

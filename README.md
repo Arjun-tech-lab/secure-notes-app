@@ -1,135 +1,97 @@
-# Turborepo starter
+🔐 Secure Notes
 
-This Turborepo starter is maintained by the Turborepo core team.
+Secure Notes is a full-stack application that allows users to store notes securely using AES-256-GCM encryption. Notes are encrypted in the backend before storage and decrypted only when retrieved, demonstrating secure data handling and modern full-stack architecture.
 
-## Using this example
+This project was built as a real-world application using Turborepo, Next.js, and Fastify, and deployed using Vercel and Render.
 
-Run the following command:
+🚀 Live Demo
 
-```sh
-npx create-turbo@latest
-```
+Frontend (Vercel):
+👉 https://your-frontend-url.vercel.app
 
-## What's inside?
+Backend API (Render):
+👉 https://your-backend-url.onrender.com
 
-This Turborepo includes the following packages/apps:
 
-### Apps and Packages
+User Browser
+      ↓
+Next.js Frontend (Vercel)
+      ↓
+Fastify Backend API (Render)
+      ↓
+AES-256-GCM Encryption
+      ↓
+Encrypted Storage (In-memory)
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+Flow
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+User enters a note in the UI.
 
-### Utilities
+Frontend sends the note to the Fastify API.
 
-This Turborepo has some additional tools already setup for you:
+Backend encrypts the note using AES-256-GCM.
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+Encrypted data is stored.
 
-### Build
+When fetched, notes are decrypted and displayed to the user.
 
-To build all apps and packages, run the following command:
+🔐 Why AES-256-GCM?
 
-```
-cd my-turborepo
+AES-GCM provides:
 
-# With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build
+Strong symmetric encryption
 
-# Without [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build
-yarn dlx turbo build
-pnpm exec turbo build
-```
+Authentication tag for integrity verification
 
-You can build a specific package by using a [filter](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters):
+Protection against data tampering
 
-```
-# With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build --filter=docs
+Efficient performance for web applications
 
-# Without [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build --filter=docs
-yarn exec turbo build --filter=docs
-pnpm exec turbo build --filter=docs
-```
+This ensures that stored data remains confidential and secure.
 
-### Develop
+🧰 Tech Stack
+Frontend
 
-To develop all apps and packages, run the following command:
+Next.js
 
-```
-cd my-turborepo
+React
 
-# With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev
+Tailwind CSS
 
-# Without [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev
-yarn exec turbo dev
-pnpm exec turbo dev
-```
+Backend
 
-You can develop a specific package by using a [filter](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters):
+Fastify
 
-```
-# With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev --filter=web
+Node.js
 
-# Without [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev --filter=web
-yarn exec turbo dev --filter=web
-pnpm exec turbo dev --filter=web
-```
+Crypto (AES-256-GCM)
 
-### Remote Caching
+Tooling
 
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
+Turborepo (Monorepo setup)
 
-Turborepo can use a technique known as [Remote Caching](https://turborepo.dev/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
+GitHub
 
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
+Deployment
 
-```
-cd my-turborepo
+Vercel (Frontend)
 
-# With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended)
-turbo login
+Render (Backend)
 
-# Without [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation), use your package manager
-npx turbo login
-yarn exec turbo login
-pnpm exec turbo login
-```
+secure-notes/
+│
+├── apps/
+│   ├── web/      # Next.js frontend
+│   └── api/      # Fastify backend
+│
+├── packages/
+└── turbo.json
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
 
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
+For simplicity, notes are stored in memory.
+In a production environment, this would be replaced with a persistent database such as PostgreSQL or MongoDB.
 
-```
-# With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended)
-turbo link
 
-# Without [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation), use your package manager
-npx turbo link
-yarn exec turbo link
-pnpm exec turbo link
-```
+👨‍💻 Author
 
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turborepo.dev/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.dev/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.dev/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.dev/docs/reference/configuration)
-- [CLI Usage](https://turborepo.dev/docs/reference/command-line-reference)
+Arjun Indavara
