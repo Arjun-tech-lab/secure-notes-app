@@ -2,31 +2,53 @@
 
 import { useState, useEffect } from "react";
 
+type Note = {
+  id: number;
+  text: string;
+};
+
 export default function Home() {
   const [text, setText] = useState("");
-  const [notes, setNotes] = useState([]);
+  const [notes, setNotes] = useState<Note[]>([]);
 
-  const API_URL = "http://localhost:4000";
+  const API_URL = process.env.NEXT_PUBLIC_API_URL!;
 
+  // Save note
   const saveNote = async () => {
     if (!text.trim()) return;
 
-    await fetch(`${API_URL}/notes`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ text }),
-    });
+    try {
+      await fetch(`${API_URL}/notes`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ text }),
+      });
 
-    setText("");
-    fetchNotes();
+      setText("");
+      fetchNotes();
+    } catch (error) {
+      console.error("Save failed:", error);
+    }
   };
 
+  // Fetch notes safely
   const fetchNotes = async () => {
-    const res = await fetch(`${API_URL}/notes`);
-    const data = await res.json();
-    setNotes(data);
+    try {
+      const res = await fetch(`${API_URL}/notes`);
+      const data = await res.json();
+
+      // ensure notes is always an array
+      if (Array.isArray(data)) {
+        setNotes(data);
+      } else {
+        setNotes([]);
+      }
+    } catch (error) {
+      console.error("Fetch failed:", error);
+      setNotes([]);
+    }
   };
 
   useEffect(() => {
@@ -41,7 +63,8 @@ export default function Home() {
         </h1>
 
         <p className="text-gray-500 mt-2">
-          Notes are encrypted using AES-GCM and displayed decrypted below.
+          Notes are encrypted using AES-256-GCM in the backend before storage
+          and displayed decrypted below.
         </p>
 
         {/* Input Section */}
@@ -71,7 +94,7 @@ export default function Home() {
             <p className="text-gray-400">No notes saved yet.</p>
           )}
 
-          {notes.map((note: any) => (
+          {notes.map((note) => (
             <div
               key={note.id}
               className="p-4 bg-gray-50 border rounded-lg shadow-sm"
